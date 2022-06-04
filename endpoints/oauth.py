@@ -4,6 +4,7 @@ from fastapi import APIRouter, Form
 
 oauth = APIRouter()
 
+
 @oauth.post("/oauth/token")
 async def oauth_token(
     username: str = Form(),
@@ -11,7 +12,7 @@ async def oauth_token(
     grant_type: str = Form(),
     client_id: str = Form(),
     client_secret: str = Form(),
-    scope: str = Form()
+    scope: str = Form(),
 ):
     print(username, "just logged in.")
     return {

@@ -16,41 +16,45 @@ class BeatmapOnlineStatus(Enum):
     Qualified = 3
     Loved = 4
 
+
 class APIFailTimes(BaseModel):
     fail: list[int]
     retries: list[int]
 
+
 class BeatmapSetOnlineCover(BaseModel):
-    cover: str = Field(alias="cover@2x")
-    card: str = Field(alias="card@2x")
-    list: str = Field(alias="list@2x")
+    cover: str
+    card: str
+    list: str
 
     class Config:
-        fields = {
-            "cover": "cover@2x",
-            "card": "card@2x",
-            "list": "card@2x"
-        }
+        fields = {"cover": "cover@2x", "card": "card@2x", "list": "card@2x"}
+
 
 class BeatmapSetHypeStatus(BaseModel):
     current: int
     required: int
 
+
 class BeatmapSetNominationStatus(BaseModel):
     current: int
     required: int
+
 
 class BeatmapSetOnlineAvailability(BaseModel):
     download_disabled: bool
     more_information: str
 
+
 class BeatmapSetOnlineGenre(BaseModel):
     id: int
     name: str
 
+
 class BeatmapSetOnlineLanguage(BaseModel):
     id: int
     name: str
+
 
 class _APIBeatmap(BaseModel):
     id: int
@@ -71,6 +75,7 @@ class _APIBeatmap(BaseModel):
     version: str
     failtimes: Optional[APIFailTimes]
     max_combo: Optional[int]
+
 
 class APIBeatmapSet(BaseModel):
     covers: BeatmapSetOnlineCover
@@ -106,6 +111,7 @@ class APIBeatmapSet(BaseModel):
 class APIBeatmap(_APIBeatmap):
     beatmapset: Optional[APIBeatmapSet]
 
+
 def test_beatmap_model(beatmap_id: int):
     map = APIBeatmap(
         id=beatmap_id,
@@ -130,7 +136,7 @@ def test_beatmap_model(beatmap_id: int):
         covers={
             "cover@2x": "https://assets.ppy.sh/beatmaps/163112/covers/cover.jpg",
             "card@2x": "https://assets.ppy.sh/beatmaps/163112/covers/cover.jpg",
-            "list@2x": "https://assets.ppy.sh/beatmaps/163112/covers/cover.jpg"
+            "list@2x": "https://assets.ppy.sh/beatmaps/163112/covers/cover.jpg",
         },
         id=1,
         status=BeatmapOnlineStatus.Loved,
@@ -152,20 +158,15 @@ def test_beatmap_model(beatmap_id: int):
             download_disabled=True,
             more_information="https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         ),
-        genre=BeatmapSetOnlineGenre(
-            id=1,
-            name="POOOOOOOP"
-        ),
-        language=BeatmapSetOnlineLanguage(
-            id=1,
-            name="POOOOOOOP"
-        ),
+        genre=BeatmapSetOnlineGenre(id=1, name="POOOOOOOP"),
+        language=BeatmapSetOnlineLanguage(id=1, name="POOOOOOOP"),
         tags="dick",
-        beatmaps=[map]
+        beatmaps=[map],
     )
 
     map.beatmapset = set
     return map
+
 
 def test_beatmapset_model(beatmap_id: int):
     map = APIBeatmap(
@@ -188,44 +189,36 @@ def test_beatmapset_model(beatmap_id: int):
     )
 
     set = APIBeatmapSet(
-        covers = {
+        covers={
             "cover@2x": "https://assets.ppy.sh/beatmaps/163112/covers/cover.jpg",
             "card@2x": "https://assets.ppy.sh/beatmaps/163112/covers/cover.jpg",
-            "list@2x": "https://assets.ppy.sh/beatmaps/163112/covers/cover.jpg"
+            "list@2x": "https://assets.ppy.sh/beatmaps/163112/covers/cover.jpg",
         },
-        id = 1,
-        status = BeatmapOnlineStatus.Loved,
-        preview_url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        has_favourited = True,
-        play_count = random.randint(0, 10000),
-        favourite_count = random.randint(0, 10000),
-        bpm = random.uniform(0.0, 300.0),
-        nsfw = True,
-        spotlight = True,
-        video = True,
-        storyboard = False,
-        submitted_date = datetime.now().isoformat(),
-        title_unicode = "Deez nuts",
-        artist_unicode = "Ha, gotteeem",
-        user_id = 1000,
-        creator = "trold",
-        availability = BeatmapSetOnlineAvailability(
-            download_disabled = True,
-            more_information = "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        id=1,
+        status=BeatmapOnlineStatus.Loved,
+        preview_url="https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        has_favourited=True,
+        play_count=random.randint(0, 10000),
+        favourite_count=random.randint(0, 10000),
+        bpm=random.uniform(0.0, 300.0),
+        nsfw=True,
+        spotlight=True,
+        video=True,
+        storyboard=False,
+        submitted_date=datetime.now().isoformat(),
+        title_unicode="Deez nuts",
+        artist_unicode="Ha, gotteeem",
+        user_id=1000,
+        creator="trold",
+        availability=BeatmapSetOnlineAvailability(
+            download_disabled=True,
+            more_information="https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         ),
-        genre = BeatmapSetOnlineGenre(
-            id = 1,
-            name = "POOOOOOOP"
-        ),
-        language = BeatmapSetOnlineLanguage(
-            id = 1,
-            name = "POOOOOOOP"
-        ),
-        tags = "dick",
-        beatmaps = [map]
+        genre=BeatmapSetOnlineGenre(id=1, name="POOOOOOOP"),
+        language=BeatmapSetOnlineLanguage(id=1, name="POOOOOOOP"),
+        tags="dick",
+        beatmaps=[map],
     )
 
     map.beatmapset = set
     return set
-
-
