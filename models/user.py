@@ -221,6 +221,6 @@ def test_user_model() -> APIUser:
             )
         ],
         user_achievements=[],
-        monthly_playcounts=[random.randint(0, 10000) for _ in range(89)],
+        monthly_playcounts=[],
         replays_watched_counts=[],
     )
