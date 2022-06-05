@@ -1,3 +1,4 @@
+import glob
 import random
 
 from fastapi import APIRouter, Query, Request
@@ -15,8 +16,8 @@ api = APIRouter(prefix="/api/v2")
 
 
 @api.get("/me/")
-async def me() -> APIUser:
-    return test_user_model()
+async def me(req: Request) -> APIUser:
+    return glob.players[req.user.access_token]
 
 
 @api.get("/friends")
@@ -41,6 +42,7 @@ async def beatmaps_score(
 
 @api.post("/beatmaps/{beatmap_id}/solo/scores")
 async def solo_score(req: Request, beatmap_id: int) -> dict[str, int]:
+    # reserve a score id
     return {"id": random.randint(0, 10000000)}
 
 

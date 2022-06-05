@@ -1,8 +1,10 @@
 import random
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Any
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+
+from constants import country
 
 
 class Country(BaseModel):
@@ -126,6 +128,93 @@ class APIUser(BaseModel):
     monthly_playcounts: list[APIUserHistoryCount]
     replays_watched_counts: list[APIUserHistoryCount]
     statistics_rulesets: Optional[dict[str, UserStatistics]]
+
+    token: Optional[str] = Field(exclude=True)  # wont include in api
+
+
+def create_user_model(
+    existing: dict[str, Any], statistics: dict[str, Any] = None, token: str = None
+) -> APIUser:
+    nation = existing["country"]
+    del existing["country"]
+
+    return APIUser(
+        **existing,
+        previous_names=[],
+        country=Country(name=country.codes[nation], code=nation),
+        profile_colour="f6f",
+        avatar_url="https://i.imgur.com/710zC3Z.png",
+        cover_url="https://osu.ppy.sh/images/headers/profile-covers/c1.jpg",
+        cover=Cover(custom_url="", url="", id=0),
+        is_admin=True,
+        is_supporter=True,
+        support_level=3,
+        is_gmt=False,
+        is_qat=False,
+        is_bng=False,
+        is_bot=False,
+        is_active=True,
+        is_online=True,
+        post_count=random.randint(0, 1000),
+        comments_count=random.randint(0, 1000),
+        mapping_follower_count=random.randint(0, 1000),
+        favourite_beatmapset_count=random.randint(0, 1000),
+        graveyard_beatmapset_count=random.randint(0, 1000),
+        loved_beatmapset_count=random.randint(0, 1000),
+        ranked_beatmapset_count=random.randint(0, 1000),
+        pending_beatmapset_count=random.randint(0, 1000),
+        guest_beatmapset_count=random.randint(0, 1000),
+        scores_best_count=random.randint(0, 1000),
+        scores_first_count=random.randint(0, 1000),
+        scores_recent_count=random.randint(0, 1000),
+        scores_pinned_count=random.randint(0, 1000),
+        beatmap_playcounts_count=random.randint(0, 1000),
+        playstyle=["Mouse", "Keyboard"],
+        profile_order=[
+            "me",
+            "top_ranks",
+            "recent_activity",
+            "beatmaps",
+            "historical",
+            "kudosu",
+            "medals",
+        ],
+        kudosu=KudosuCount(
+            total=random.randint(0, 1000), available=random.randint(0, 1000)
+        ),
+        statistics=UserStatistics(
+            level=LevelInfo(
+                current=random.randint(0, 500), progress=random.randint(0, 100)
+            ),
+            is_ranked=True,
+            global_rank=random.randint(0, 500),
+            country_rank=random.randint(0, 200),
+            pp=random.uniform(0, 100000),
+            ranked_score=random.uniform(0, 100000),
+            hit_accuracy=random.random(),
+            play_count=random.randint(0, 10000),
+            play_time=random.randint(0, 10000),
+            total_score=random.randint(0, 10000),
+            maximum_combo=random.randint(0, 10000),
+            replays_watched_by_other=random.randint(0, 10000),
+            grade_counts=Grades(
+                ssh=random.randint(0, 10000),
+                ss=random.randint(0, 10000),
+                sh=random.randint(0, 10000),
+                s=random.randint(0, 10000),
+                a=random.randint(0, 10000),
+            ),
+            mode="osu",
+            data=[random.randint(0, 10000) for _ in range(89)],
+        ),
+        rank_history=APIRankHistory(
+            mode="osu", data=[random.randint(0, 10000) for _ in range(89)]
+        ),
+        badges=[],
+        user_achievements=[],
+        monthly_playcounts=[],
+        replays_watched_counts=[],
+    )
 
 
 def test_user_model() -> APIUser:
